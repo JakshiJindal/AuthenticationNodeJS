@@ -1,0 +1,15 @@
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/layouts.css">
+    <!-- body style sheets links -->
+    <%- style %>
+</head>
+<body>
+    <%- include('_header'); %>
+    <!-- body will render ejs files  -->
+    <%- body %>
+    <%- include('_footer'); %>
+    <%- script %>
+</body>
