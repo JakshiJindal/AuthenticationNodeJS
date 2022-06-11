@@ -1,12 +1,15 @@
-const authentication = require('../models/authenticate');
-const User=require('../models/authenticate');
-module.exports.signup=function(req,res){
-    return res.render('user_profile',{
-        title:"codial | Sign up"
+const User=require('../models/user');
+
+module.exports.profile = function(req, res){
+    return res.render('user_profile', {
+        title: 'User Profile'
     })
 }
 //render sign up page
 module.exports.signup=function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('user_sign_up',{
         title:"codial | Sign up"
     })
@@ -14,6 +17,9 @@ module.exports.signup=function(req,res){
 
 // render sign in page
 module.exports.signin=function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('user_sign_in',{
         title:'Codial | Sign in'
     })
@@ -21,7 +27,6 @@ module.exports.signin=function(req,res){
 
 //get sign up data
 module.exports.create=function(req,res){
-    console.log(req.body);
     // match password with confirm one then move on
   if(req.body.password!=req.body.confirm_password){
       return res.redirect('/users/sign-up');
@@ -34,6 +39,7 @@ module.exports.create=function(req,res){
       }
     //   if user not present create user
       if(!user){
+          
           User.create({username:req.body.email,password:req.body.password,name:req.body.name}
             ,function(err,user){
               if(err){
@@ -52,30 +58,12 @@ module.exports.create=function(req,res){
 
 // sign in and create session
 module.exports.createSession=function(req,res){
-    // steps to authenticate 
-    // find user
-User.findOne({email:req.body.email},function(err,user){
-    if(err){
-        console.log('error in finding user in siging in');
-        return;
-        }
+    // steps to authenticate using passport
+  return res.redirect('/');
+  
+}
+module.exports.destroySession=function(req,res){
+    req.logout();
 
-    // handle user found
-    if(user){
-
-       //handle password which doesn't match
-       if(user.password!=req.body.password){
-        return res.redirect('/users/sign-in');
-    }
-       // handle session creation
-       res.cookie('user_id',user.id);
-       return res.redirect('/profile?username='+req.body.email+'&password='+req.body.password);
-   }else{
-
-      //handle user not found
-
-      return res.redirect('/users/sign-in');
- }
-});
-
+    return res.redirect('/');
 }

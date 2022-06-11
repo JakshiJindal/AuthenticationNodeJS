@@ -1,30 +1,21 @@
-const authentication = require('../models/authenticate');
-const User=require('../models/authenticate');
-
+const Post=require('../models/posts');
 // get TODOS list using get request
-module.exports.getTODO=function(req,res){
-    return res.render('home',{
-        title:'Home'
-    })
-}
-module.exports.profile=function(req,res){
-    if(req.cookies.user_id){
-    User.findById(req.cookies.user_id,function(err,user){
-        if(user){
-            return res.render('user_profile',{
-                title:'Profile',
-                user:user
-            })
-        }
-    })
-}
-else{
-    // by mine mehtod using query params
-    // return res.render('user_profile',{
-    //     title:'Profile',
-    //     username:req.query.username,
-    //     password:req.query.password
-    // })
-    return res.redirect('/users/sign-in');
-}
+module.exports.home = function(req, res){
+    // console.log(req.cookies);
+    // res.cookie('user_id', 25);
+
+//     Post.find({},function(err,posts){
+//     return res.render('home', {
+//         title: "Codial|Home",
+//         posts:posts
+//     });
+// });
+//populate user of each post
+Post.find({}).populate('user').exec(function(err,posts){
+    console.log('postssss',posts);
+    return res.render('home', {
+        title: "Codial|Home",
+        posts:posts
+    });
+})
 }

@@ -16,6 +16,6 @@ const authenticateSchema=mongoose.Schema({
     }
 })
 
-const authentication=mongoose.model('AuthenticationModel',authenticateSchema);
+const User=mongoose.model('User',authenticateSchema);
 
-module.exports= authentication;
+module.exports= User;
