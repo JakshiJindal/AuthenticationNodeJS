@@ -7,4 +7,5 @@ router.get('/',homeController.home);
 //route to add TODO in list
 router.use('/users',users);
 router.use('/posts',require('./posts'));
+router.use('/comment',require('./comments'));
 module.exports=router;

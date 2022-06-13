@@ -29,17 +29,18 @@ module.exports.signin=function(req,res){
 module.exports.create=function(req,res){
     // match password with confirm one then move on
   if(req.body.password!=req.body.confirm_password){
+    console.log(req.body);
       return res.redirect('/users/sign-up');
   }
 //   find user by email id
-  User.findOne({email:req.body.email},function(err,user){
+  User.findOne({username:req.body.email},function(err,user){
     if(err){
       console.log('error in finding user');
       return;
       }
+      console.log(req.body.email);
     //   if user not present create user
       if(!user){
-          
           User.create({username:req.body.email,password:req.body.password,name:req.body.name}
             ,function(err,user){
               if(err){
@@ -51,6 +52,7 @@ module.exports.create=function(req,res){
         }
         // if user already present go to sign-up page
         else{
+    console.log(user);
             return res.redirect('/users/sign-up');
         }
   })
@@ -60,7 +62,6 @@ module.exports.create=function(req,res){
 module.exports.createSession=function(req,res){
     // steps to authenticate using passport
   return res.redirect('/');
-  
 }
 module.exports.destroySession=function(req,res){
     req.logout();
