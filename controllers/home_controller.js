@@ -1,4 +1,5 @@
 const Post=require('../models/posts');
+const User=require('../models/user');
 // get TODOS list using get request
 module.exports.home = function(req, res){
     // console.log(req.cookies);
@@ -19,9 +20,12 @@ Post.find({}).populate('user')
     }
 })
 .exec(function(err,posts){
-    return res.render('home', {
+    User.find({},function(err,users){
+          return res.render('home', {
         title: "Codial|Home",
-        posts:posts
+        posts:posts,
+        all_users:users
+    });
     });
 })
 }

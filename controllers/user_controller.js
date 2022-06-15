@@ -1,10 +1,24 @@
 const User=require('../models/user');
 
 module.exports.profile = function(req, res){
+  User.findById(req.params.id,function(err,user){
     return res.render('user_profile', {
-        title: 'User Profile'
-    })
+      title: 'User Profile',
+      profile_user:user
+  })
+  })
+    
 }
+module.exports.update=function(req,res){
+  if(req.user.id===req.params.id){
+    User.findByIdAndUpdate(req.params.id,{name:req.body.name,username:req.body.email},function(err,user){
+      return res.redirect('/');
+    });
+  }
+    else{
+      return res.status(401).send('Unauthorized');
+    }
+  }
 //render sign up page
 module.exports.signup=function(req,res){
     if(req.isAuthenticated()){
