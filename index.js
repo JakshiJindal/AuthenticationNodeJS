@@ -8,12 +8,17 @@ const passport=require('passport');
 const passportLocal=require('./config/passport-local-strategy');
 const sassMiddleware=require('node-sass-middleware');
 const cookieParser=require('cookie-parser');
+// flash messages
+const flash=require('connect-flash');
+const customMware=require('./config/middleware');
 
 const app=express();
 const port=8000;
 const expressLayouts=require('express-ejs-layouts');
 app.use(expressLayouts);
 app.use(cookieParser());
+// make the upload paths avaliable to browser
+app.use('/uploads',express.static(__dirname+'/uploads'));
 
 app.use(sassMiddleware({
     src:'./assets/scss',
@@ -51,6 +56,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+// add flash as middleware after setting passport middleware
+app.use(flash());
+app.use(customMware.setFlash);
+
 app.set('layout extractStyles',true);
 app.set('layout extractScripts',true);
 
